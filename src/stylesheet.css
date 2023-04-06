@@ -1,0 +1,95 @@
+.wrapper, html, body {
+    height: 100%;
+    margin: 0;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+button {
+  width: 30%;
+  height: 5rem;
+  border-radius: 4%;
+  border-style: groove;
+  background-color: rgb(254,251,234);
+  font-size: xx-large;
+}
+
+#app{
+  /* height: 100%; */
+}
+
+#main-content{
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+    align-items: stretch;
+    flex-grow: 1;
+    height: 96%;
+}
+
+#calculator{
+    margin: 5px;
+    padding: 8px;
+    background-color: aqua;
+    flex-grow: 20;
+    font-size: x-large;
+}
+
+input[type=number]{
+    width: 20%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+  option{
+    width: 20%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  select{
+    width: 20%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+#results-body{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 80;
+}
+
+#graph-results{
+    margin: 5px;
+    padding: 8px;
+    background-color: crimson;
+    flex-grow: 80;
+}
+
+#text-results{
+    margin: 5px;
+    padding: 8px;
+    background-color: blueviolet;
+    flex-grow: 20;
+}
