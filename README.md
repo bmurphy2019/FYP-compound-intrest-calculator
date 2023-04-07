@@ -1,4 +1,4 @@
-# vue-chartjs-example
+# R00189335 FYP
 
 ## Project setup
 ```
@@ -18,6 +18,11 @@ npm run build
 ### Lints and fixes files
 ```
 npm run lint
+```
+
+### Builds and deploys live to firebase 
+```
+npm run build && firebase deploy
 ```
 
 ### Customize configuration
