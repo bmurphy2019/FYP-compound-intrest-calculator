@@ -22,8 +22,8 @@
                     <option value="year">Yearly</option>
                 </select> <br>
 
-                <label for="optinalFeesFrequency"> Optional tax / fees : </label>
-                <input v-model="optinalFeesFrequency" type="number" id="optinalFeesFrequency" name="optinalFeesFrequency"> 
+                <label for="optinalFeesValue"> Optional tax / fees : </label>
+                <input v-model="optinalFeesValue" type="number" id="optinalFeesValue" name="optinalFeesValue"> 
                 <select v-model="optinalFeesPeriod" id="optinalFeesPeriod" name="optinalFeesPeriod">
                     <option value="month">Monthly</option>
                     <option value="year">Yearly</option>
@@ -67,7 +67,7 @@ export default {
       optionalContributionPeriod: "year",
       compoundFrequency: 0,
       compoundFrequencyPeriod: "year",
-      optinalFeesFrequency: 0,
+      optinalFeesValue: 0,
       optinalFeesPeriod: "year",
       investmentPeriodValue: 0,
       investmentPeriod: "year",
@@ -82,12 +82,12 @@ export default {
     }
   },
   computed: {
-    contributionPerMonth: function () {
+    contributeEveryXMonths: function () {
       if (this.optionalContributionPeriod == "year") {
-        return (this.optionalContributionValue / (12 * this.optionalContributionFequency))
+        return this.optionalContributionFequency * 12
       }
       else {
-        return (this.optionalContributionValue / this.optionalContributionFequency)
+        return this.optionalContributionFequency
       }
     },
     monthlyIntrestRate: function () {
@@ -98,21 +98,21 @@ export default {
         return this.compoundFrequency
       }
     },
-    monthlyFees: function () {
+    feesEveryXMonths: function () {
       if (this.optinalFeesPeriod == "year") {
-        return (this.optinalFeesFrequency / 12)
+        return  12
       }
       else {
-        return this.optinalFeesFrequency
+        return 1
       }
     },
     investedTimeMonths() {
       if (this.investmentPeriodValue != 0) {
         if (this.investmentPeriod == "year") {
-          return (12 * this.investmentPeriodValue)
+          return 12 * this.investmentPeriodValue
         }
         else {
-          return (this.investmentPeriodValue)
+          return this.investmentPeriodValue
         }
       }
       else return 0
@@ -133,24 +133,44 @@ export default {
       }else{
         chartLabels.push("Month 0")
       }
+      console.log("TEST ")
       for (let i = 1; i <= this.investedTimeMonths; i++) {
+        if(i%this.contributeEveryXMonths ==0 ){
+          currentMoney = currentMoney+ this.optionalContributionValue
+          moneyInvested.push(moneyInvested[moneyInvested.length-1]+ this.optionalContributionValue)
+        }else{
+          moneyInvested.push(moneyInvested[moneyInvested.length-1])
+        }
+        if(i%this.feesEveryXMonths ==0 ){
+          currentMoney = currentMoney- this.optinalFeesValue
+        }
+        currentMoney = currentMoney  * (1 + (this.monthlyIntrestRate / 100))
+        this.compoundJourney.push(Math.round((currentMoney + Number.EPSILON) * 100) / 100)
+
         if(this.investmentPeriod=="year" && i%12 == 0){
           chartLabels.push("Year "+i/12)
         }else if(this.investmentPeriod =="month"){
           chartLabels.push("Month "+i)
         }
-        currentMoney = (currentMoney + this.contributionPerMonth - this.monthlyFees) * (1 + (this.monthlyIntrestRate / 100))
-        if(currentMoney != 0 || currentMoney !=""){
-        // eslint-disable-next-line
-        this.compoundJourney.push(Math.round((currentMoney + Number.EPSILON) * 100) / 100)
-        moneyInvested.push(moneyInvested[moneyInvested.length -1]+ this.contributionPerMonth)
-      }
       }
       this.calculatorResult = Math.round((currentMoney + Number.EPSILON) * 100) / 100
       let gains = this.calculatorResult - this.initialCapital
       this.compoundGains = Math.round((gains + Number.EPSILON) * 100) / 100
-      this.savings.compound = this.compoundJourney
-      this.savings.contributions= moneyInvested
+
+      if(this.investmentPeriod=="month"){
+        this.savings.compound = this.compoundJourney
+        this.savings.contributions= moneyInvested
+      }else if(this.investmentPeriod == "year"){
+        let compoundGrowth=[]
+        let contributionGrowth=[]
+        for (let i = 0; i < this.compoundJourney.length; i=i+12) {
+          compoundGrowth.push(this.compoundJourney[i]);
+          contributionGrowth.push(moneyInvested[i])
+        }
+        this.savings.compound = compoundGrowth
+        this.savings.contributions= contributionGrowth
+      }
+
       this.savings.labels = chartLabels
     }
   }
