@@ -43,7 +43,7 @@
             <Chart v-bind:savings="savings" />
           </div>
             <div id="text-results">
-            <p> Total after investment €{{ calculatorResult }} </p>
+            <p> Total after investment €{{ compoundJourney }} </p>
             <p> Total gained €{{ compoundGains }} </p>
             </div>
         </div>
@@ -133,8 +133,14 @@ export default {
       }else{
         chartLabels.push("Month 0")
       }
-      console.log("TEST ")
       for (let i = 1; i <= this.investedTimeMonths; i++) {
+        currentMoney = currentMoney  * (1 + (this.monthlyIntrestRate / 100))
+
+        if(this.investmentPeriod=="year" && i%12 == 0){
+          chartLabels.push("Year "+i/12)
+        }else if(this.investmentPeriod =="month"){
+          chartLabels.push("Month "+i)
+        }
         if(i%this.contributeEveryXMonths ==0 ){
           currentMoney = currentMoney+ this.optionalContributionValue
           moneyInvested.push(moneyInvested[moneyInvested.length-1]+ this.optionalContributionValue)
@@ -144,14 +150,7 @@ export default {
         if(i%this.feesEveryXMonths ==0 ){
           currentMoney = currentMoney- this.optinalFeesValue
         }
-        currentMoney = currentMoney  * (1 + (this.monthlyIntrestRate / 100))
         this.compoundJourney.push(Math.round((currentMoney + Number.EPSILON) * 100) / 100)
-
-        if(this.investmentPeriod=="year" && i%12 == 0){
-          chartLabels.push("Year "+i/12)
-        }else if(this.investmentPeriod =="month"){
-          chartLabels.push("Month "+i)
-        }
       }
       this.calculatorResult = Math.round((currentMoney + Number.EPSILON) * 100) / 100
       let gains = this.calculatorResult - this.initialCapital
