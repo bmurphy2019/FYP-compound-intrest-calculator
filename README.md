@@ -1,4 +1,4 @@
-# R00189335 FYP
+# R00189335 FYP Brian Murphy
 
 ## Project setup
 ```
