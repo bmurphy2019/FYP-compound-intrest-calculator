@@ -53,6 +53,7 @@
 
 <script>
 import Chart from './components/Compound-Chart.vue'
+import { getAnalytics, logEvent } from "firebase/analytics";
 
 export default {
   name: 'App',
@@ -61,6 +62,7 @@ export default {
   },
   data() {
     return {
+      analytics: getAnalytics(),
       initialCapital: 0,
       optionalContributionValue: 0,
       optionalContributionFequency: 1,
@@ -120,6 +122,7 @@ export default {
   },
   methods:{
     caluclate(){
+      logEvent(this.analytics, 'notification_received');
       this.compoundJourney = []
       let currentMoney = this.initialCapital
       let moneyInvested = [this.initialCapital]
