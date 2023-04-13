@@ -1,6 +1,8 @@
-.wrapper, html, body {
-    height: 100%;
-    margin: 0;
+.wrapper,
+html,
+body {
+  height: 100%;
+  margin: 0;
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -13,83 +15,199 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+  font-size: large;
 }
 
 button {
-  width: 30%;
+  width: auto;
   height: 5rem;
   border-radius: 4%;
   border-style: groove;
-  background-color: rgb(254,251,234);
+  background-color: rgb(254, 251, 234);
   font-size: xx-large;
 }
 
-#app{
-  /* height: 100%; */
+#app {
+  height: 90%;
 }
 
-#main-content{
-    display: flex;
-    flex-direction: row;
-    margin: 10px;
-    align-items: stretch;
-    flex-grow: 1;
-    height: 96%;
+#main-content {
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+  align-items: stretch;
+  flex-grow: 1;
+  height: 96%;
 }
 
-#calculator{
-    margin: 5px;
-    padding: 8px;
-    background-color: aqua;
-    flex-grow: 20;
-    font-size: x-large;
+#calculator {
+  margin: 5px;
+  background-color: aqua;
+  font-size: x-large;
+  transition: width 1s ease-in-out;
+  display: table;
 }
 
-input[type=number]{
-    width: 20%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+.table-row {
+  display: table-row;
+}
+
+.table-cell {
+  width: 0.1%;
+  display: table-cell;
+  white-space: nowrap;
+}
+
+.calcuatorDesignBStart {
+  margin: 10%;
+  padding-top: 5%;
+  padding-left: 5%;
+  width: 100%;
+  flex-grow: 0;
+}
+
+.calcuatorDesignBStart>div>div>input[type=number] {
+  width: 25%;
+}
+
+.calcuatorDesignBStart>div>div>span>input[type=number] {
+  width: 25%;
+}
+
+.calcuatorDesignBStart>div>div>select {
+  width: 25%;
+}
+
+.calcuatorDesignBStart>div>div>span>select {
+  width: 25%;
+}
+
+.divSlide {
+  width: 35%;
+  flex-grow: 0;
+  padding: 8px;
+  animation-name: padding-skrink;
+  animation-duration: 1s;
+}
+
+@keyframes padding-skrink {
+  from {
+    padding-top: 5%;
+    padding-left: 5%;
   }
 
-  option{
-    width: 20%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+  to {
+    padding: 8px;
   }
-  select{
-    width: 20%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }
-
-#results-body{
-    display: flex;
-    flex-direction: column;
-    flex-grow: 80;
 }
 
-#graph-results{
-    margin: 5px;
-    padding: 8px;
-    background-color: crimson;
-    flex-grow: 80;
+.fadeIn {
+  animation-name: div-appear;
+  animation-duration: 1s;
 }
 
-#text-results{
-    margin: 5px;
-    padding: 8px;
-    background-color: blueviolet;
-    flex-grow: 20;
+@keyframes div-appear {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.calcuatorDesignBEnd {
+  flex-grow: 20;
+  padding: 8px;
+}
+
+.calcuatorDesignA {
+  flex-grow: 20;
+  padding: 8px;
+}
+
+
+input[type=number] {
+  /* width: 40%; */
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+option {
+  width: 20%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+select {
+  width: auto;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+#results-body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 80;
+}
+
+#graph-results {
+  margin: 5px;
+  padding: 8px;
+  background-color: crimson;
+  flex-grow: 80;
+}
+
+#text-results {
+  margin: 5px;
+  padding: 8px;
+  background-color: blueviolet;
+  flex-grow: 20;
+  height: 10%;
+}
+
+.input-euro {
+  position: relative;
+}
+
+.input-euro.left input {
+  padding-left: 24px;
+}
+
+.input-euro:before {
+  padding-left: 10px;
+  position: absolute;
+  top: 0;
+  content: "€";
+}
+
+.input-percent {
+  position: relative;
+}
+
+.input-percnet.right input {
+  padding-right: 18px;
+  text-align: end;
+}
+
+.input-percent:before {
+  position: absolute;
+  top: 0;
+  content: "%";
+}
+
+.input-percent.right:before {
+  right: 5px;
 }
