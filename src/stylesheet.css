@@ -53,9 +53,12 @@ button {
 }
 
 .table-cell {
-  width: 0.1%;
   display: table-cell;
   white-space: nowrap;
+}
+.table-cell>p{
+  font-size: large;
+  color: black;
 }
 
 .calcuatorDesignBStart {
@@ -128,7 +131,7 @@ button {
 
 
 input[type=number] {
-  /* width: 40%; */
+  width: 40%;
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;

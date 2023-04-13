@@ -154,7 +154,7 @@ export default {
       compoundFrequencyPeriod: "year",
       optinalFeesValue: '',
       optinalFeesPeriod: "year",
-      investmentPeriodValue: 0,
+      investmentPeriodValue: '',
       investmentPeriod: "year",
       compoundJourney: [],
       calculatorResult: 0,
