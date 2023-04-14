@@ -1,5 +1,6 @@
 <template>
   <body>
+    <h1> Simple Compound</h1>
     <div id="main-content">
       <div id="calculator"
         :class="{ calcuatorDesignBStart: this.isInExperiment && this.resultsHiden && !this.slideAnimation, calcuatorDesignBEnd: this.isInExperiment && !this.resultsHiden, calcuatorDesignA: !this.isInExperiment, divSlide: this.slideAnimation }">
@@ -15,7 +16,7 @@
           </div>
           <div class="table-cell" v-if="this.resultsHiden && !this.slideAnimation">
             <p>
-              &lt;- How much money are you starting with?
+              <i class="arrow left"></i>- How much money are you starting with?
             </p>
           </div>
         </div>
@@ -32,7 +33,7 @@
           </div>
           <div class="table-cell" v-if="this.resultsHiden && !this.slideAnimation">
             <p>
-              &lt;- How much money, if any, are you adding periodically?
+              <i class="arrow left"></i>- How much money, if any, are you adding periodically?
             </p>
           </div>
         </div>
@@ -52,7 +53,7 @@
           </div>
           <div class="table-cell" v-if="this.resultsHiden && !this.slideAnimation">
             <p>
-              &lt;- How often are you adding money?
+              <i class="arrow left"></i>- How often are you adding money?
             </p>
           </div>
         </div>
@@ -72,7 +73,7 @@
           </div>
           <div class="table-cell" v-if="this.resultsHiden && !this.slideAnimation">
             <p>
-              &lt;- what percent gains do you expect and how often?
+              <i class="arrow left"></i>- what percent gains do you expect and how often?
             </p>
           </div>
         </div>
@@ -82,17 +83,23 @@
             <label for="optinalFeesValue"> Optional tax / fees : </label>
           </div>
           <div class="table-cell">
-            <span class="input-euro left">
-              <input v-model="optinalFeesValue" type="number" id="optinalFeesValue" name="optinalFeesValue">
-            </span>
+            <select v-model="optinalFeesSymbol" id="optinalFeesSymbol" name="optinalFeesSymbol">
+              <option value="euro">€</option>
+              <option value="percent">%</option>
+            </select>
+            <input v-model="optinalFeesValue" type="number" id="optinalFeesValue" name="optinalFeesValue">
+            <select v-if="this.optinalFeesSymbol == 'percent'" v-model="optinalFeesofWhat" id="optinalFeesofWhat" name="optinalFeesofWhat">
+              <option value="gains">of Gains</option>
+              <option value="total">of Total </option>
+            </select>
             <select v-model="optinalFeesPeriod" id="optinalFeesPeriod" name="optinalFeesPeriod">
-              <option value="month">Monthly</option>
-              <option value="year">Yearly</option>
-            </select> <br>
+              <option value="month">Every month</option>
+              <option value="year">Every year</option>
+            </select>
           </div>
           <div class="table-cell" v-if="this.resultsHiden && !this.slideAnimation">
             <p>
-              &lt;- How much are you being charged per month / year ?
+              <i class="arrow left"></i>- How much are you being charged per month / year ?
             </p>
           </div>
         </div>
@@ -110,7 +117,7 @@
           </div>
           <div class="table-cell" v-if="this.resultsHiden && !this.slideAnimation">
             <p>
-              &lt;- How long are you investing for?
+              <i class="arrow left"></i>- How long are you investing for?
             </p>
           </div>
         </div>
@@ -127,6 +134,9 @@
         </div>
       </div>
     </div>
+    <footer>
+      <p>By Brian Murphy <br> Munster Technological University <br> <a href="mailto:bmurphy8@mycit.ie">bmurphy8@mycit.ie</a></p>
+    </footer>
   </body>
 </template>
 
@@ -154,6 +164,8 @@ export default {
       compoundFrequencyPeriod: "year",
       optinalFeesValue: '',
       optinalFeesPeriod: "year",
+      optinalFeesSymbol: "euro",
+      optinalFeesofWhat:"gains",
       investmentPeriodValue: '',
       investmentPeriod: "year",
       compoundJourney: [],
@@ -237,7 +249,12 @@ export default {
           moneyInvested.push(moneyInvested[moneyInvested.length - 1])
         }
         if (i % this.feesEveryXMonths == 0) {
+          if(this.optinalFeesSymbol =='euro')
           currentMoney = currentMoney - this.optinalFeesValue
+        } else if(this.optinalFeesSymbol == 'percent' && this.optinalFeesofWhat =="total"){
+          currentMoney = (currentMoney * (100 - this.optinalFeesValue)) /100
+        } else if(this.optinalFeesSymbol == 'percent' && this.optinalFeesofWhat == 'gains'){
+          // currentMoney = currentMoney -
         }
         this.compoundJourney.push(Math.round((currentMoney + Number.EPSILON) * 100) / 100)
       }

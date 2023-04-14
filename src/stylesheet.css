@@ -17,6 +17,13 @@ input[type=number] {
   -moz-appearance: textfield;
   font-size: large;
 }
+h1{
+  text-align: center;
+  width: auto;
+  font-size: xx-large;
+  margin-top: 0px;
+  padding-top: 1%;
+}
 
 button {
   width: auto;
@@ -28,7 +35,7 @@ button {
 }
 
 #app {
-  height: 90%;
+  height: auto;
 }
 
 #main-content {
@@ -42,7 +49,7 @@ button {
 
 #calculator {
   margin: 5px;
-  background-color: aqua;
+  background-color: #94d2bd;
   font-size: x-large;
   transition: width 1s ease-in-out;
   display: table;
@@ -67,6 +74,7 @@ button {
   padding-left: 5%;
   width: 100%;
   flex-grow: 0;
+  padding-bottom: 5%;
 }
 
 .calcuatorDesignBStart>div>div>input[type=number] {
@@ -78,11 +86,11 @@ button {
 }
 
 .calcuatorDesignBStart>div>div>select {
-  width: 25%;
+  width: auto;
 }
 
 .calcuatorDesignBStart>div>div>span>select {
-  width: 25%;
+  width: auto;
 }
 
 .divSlide {
@@ -140,6 +148,18 @@ input[type=number] {
   box-sizing: border-box;
 }
 
+.arrow {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.left {
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+}
+
 option {
   width: 20%;
   padding: 12px 20px;
@@ -176,7 +196,7 @@ select {
 #text-results {
   margin: 5px;
   padding: 8px;
-  background-color: blueviolet;
+  background-color: #e9d8a6;
   flex-grow: 20;
   height: 10%;
 }
@@ -194,6 +214,9 @@ select {
   position: absolute;
   top: 0;
   content: "€";
+}
+#optinalFeesSymbol{
+  width: auto;
 }
 
 .input-percent {
@@ -213,4 +236,18 @@ select {
 
 .input-percent.right:before {
   right: 5px;
+}
+footer{
+  background-color: #90e0ef;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  box-sizing: border-box;
+  background: rgb(2,0,36);
+  background: -moz-linear-gradient(180deg, rgba(2,0,36,0) 0%, rgba(179,242,255,0.5228466386554622) 100%);
+  background: -webkit-linear-gradient(180deg, rgba(2,0,36,0) 0%, rgba(179,242,255,0.5228466386554622) 100%);
+  background: linear-gradient(180deg, rgba(2,0,36,0) 0%, rgba(179,242,255,0.5228466386554622) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#020024",endColorstr="#b3f2ff",GradientType=1);
+  padding-left: 10px;
+  margin: 0px;
 }
