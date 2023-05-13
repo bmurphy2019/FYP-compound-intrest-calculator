@@ -21,11 +21,6 @@ export default {
       deep: true,
       handler() {
         console.clear();
-        console.log('Update Chart');
-        console.log(this.savings.compound);
-        console.log(this.savings.contributions);
-        console.log(this.savings.labels);
-        console.log();
         this.chart.destroy();
         this.createChart();
       }

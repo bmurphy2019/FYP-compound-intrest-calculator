@@ -3,7 +3,9 @@
     <h1> Simple Compound</h1>
     <div id="main-content">
       <div id="calculator"
-        :class="{ calcuatorDesignBStart: this.isInExperiment && this.resultsHiden && !this.slideAnimation, calcuatorDesignBEnd: this.isInExperiment && !this.resultsHiden, calcuatorDesignA: !this.isInExperiment, divSlide: this.slideAnimation }">
+        :class="{ calcuatorDesignBStart: this.isInExperiment && this.resultsHiden && !this.slideAnimation, 
+          calcuatorDesignBEnd: this.isInExperiment && !this.resultsHiden, 
+          calcuatorDesignA: !this.isInExperiment, divSlide: this.slideAnimation }">
 
         <div class="table-row">
           <div class="table-cell">
@@ -83,15 +85,9 @@
             <label for="optinalFeesValue"> Optional tax / fees : </label>
           </div>
           <div class="table-cell">
-            <select v-model="optinalFeesSymbol" id="optinalFeesSymbol" name="optinalFeesSymbol">
-              <option value="euro">€</option>
-              <option value="percent">%</option>
-            </select>
+            <span class="input-euro left">
             <input v-model="optinalFeesValue" type="number" id="optinalFeesValue" name="optinalFeesValue">
-            <select v-if="this.optinalFeesSymbol == 'percent'" v-model="optinalFeesofWhat" id="optinalFeesofWhat" name="optinalFeesofWhat">
-              <option value="gains">of Gains</option>
-              <option value="total">of Total </option>
-            </select>
+            </span>
             <select v-model="optinalFeesPeriod" id="optinalFeesPeriod" name="optinalFeesPeriod">
               <option value="month">Every month</option>
               <option value="year">Every year</option>
@@ -153,8 +149,8 @@ export default {
   data() {
     return {
       divFade: false,
-      isInExperiment: true,
-      resultsHiden: true,
+      isInExperiment: false,
+      resultsHiden: false,
       slideAnimation: false,
       initialCapital: '',
       optionalContributionValue: '',
@@ -177,6 +173,15 @@ export default {
         labels: [],
       }
     }
+  },
+  mounted(){
+      if(Math.random() < 0.5){
+        this.isInExperiment = true
+        this.resultsHiden = true
+      }else{
+        this.isInExperiment =false
+        this.resultsHiden=false
+      }
   },
   computed: {
     contributeEveryXMonths: function () {
@@ -249,12 +254,7 @@ export default {
           moneyInvested.push(moneyInvested[moneyInvested.length - 1])
         }
         if (i % this.feesEveryXMonths == 0) {
-          if(this.optinalFeesSymbol =='euro')
           currentMoney = currentMoney - this.optinalFeesValue
-        } else if(this.optinalFeesSymbol == 'percent' && this.optinalFeesofWhat =="total"){
-          currentMoney = (currentMoney * (100 - this.optinalFeesValue)) /100
-        } else if(this.optinalFeesSymbol == 'percent' && this.optinalFeesofWhat == 'gains'){
-          // currentMoney = currentMoney -
         }
         this.compoundJourney.push(Math.round((currentMoney + Number.EPSILON) * 100) / 100)
       }
