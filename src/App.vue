@@ -2,10 +2,11 @@
   <body>
     <h1> Simple Compound</h1>
     <div id="main-content">
-      <div id="calculator"
-        :class="{ calcuatorDesignBStart: this.isInExperiment && this.resultsHiden && !this.slideAnimation, 
-          calcuatorDesignBEnd: this.isInExperiment && !this.resultsHiden, 
-          calcuatorDesignA: !this.isInExperiment, divSlide: this.slideAnimation }">
+      <div id="calculator" :class="{
+        calcuatorDesignBStart: this.isInExperiment && this.resultsHiden && !this.slideAnimation,
+        calcuatorDesignBEnd: this.isInExperiment && !this.resultsHiden,
+        calcuatorDesignA: !this.isInExperiment, divSlide: this.slideAnimation
+      }">
 
         <div class="table-row">
           <div class="table-cell">
@@ -86,7 +87,7 @@
           </div>
           <div class="table-cell">
             <span class="input-euro left">
-            <input v-model="optinalFeesValue" type="number" id="optinalFeesValue" name="optinalFeesValue">
+              <input v-model="optinalFeesValue" type="number" id="optinalFeesValue" name="optinalFeesValue">
             </span>
             <select v-model="optinalFeesPeriod" id="optinalFeesPeriod" name="optinalFeesPeriod">
               <option value="month">Every month</option>
@@ -131,15 +132,16 @@
       </div>
     </div>
     <footer>
-      <p>By Brian Murphy <br> Munster Technological University <br> <a href="mailto:bmurphy8@mycit.ie">bmurphy8@mycit.ie</a></p>
+      <p>By Brian Murphy <br> Munster Technological University <br> <a
+          href="mailto:bmurphy8@mycit.ie">bmurphy8@mycit.ie</a></p>
     </footer>
   </body>
 </template>
-
 <script>
 import Chart from './components/Compound-Chart.vue'
-// import { logEvent } from "firebase/analytics";
-// import { analytics } from "/public/index.html"
+import { initializeApp } from "/node_modules/firebase/app";
+import { getAnalytics, logEvent } from "/node_modules/firebase/analytics";
+import { getRemoteConfig, fetchAndActivate } from "/node_modules/firebase/remote-config";
 
 export default {
   name: 'App',
@@ -153,6 +155,7 @@ export default {
       resultsHiden: false,
       slideAnimation: false,
       initialCapital: '',
+      myAnalytics: null,
       optionalContributionValue: '',
       optionalContributionFequency: '',
       optionalContributionPeriod: "year",
@@ -161,7 +164,7 @@ export default {
       optinalFeesValue: '',
       optinalFeesPeriod: "year",
       optinalFeesSymbol: "euro",
-      optinalFeesofWhat:"gains",
+      optinalFeesofWhat: "gains",
       investmentPeriodValue: '',
       investmentPeriod: "year",
       compoundJourney: [],
@@ -174,14 +177,39 @@ export default {
       }
     }
   },
-  mounted(){
-      if(Math.random() < 0.5){
-        this.isInExperiment = true
-        this.resultsHiden = true
-      }else{
-        this.isInExperiment =false
-        this.resultsHiden=false
-      }
+  mounted() {
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyCwDD0IkhhLkIYuqBDn2gvorqEmry0XBv0",
+      authDomain: "simple-compound.firebaseapp.com",
+      projectId: "simple-compound",
+      storageBucket: "simple-compound.appspot.com",
+      messagingSenderId: "99587447037",
+      appId: "1:99587447037:web:7b3047d423dbe8d2384694",
+      measurementId: "G-WP097BK3ZL"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    // eslint-disable-next-line no-import-assign
+    this.analytics = getAnalytics(app);
+    const remoteConfig = getRemoteConfig(app);
+
+    // const rcDefaultsFile = await fetch('src/remote_config_defaults.json');
+    // const rcDefaultsJson = await rcDefaultsFile.json();
+    // remoteConfig.defaultConfig = rcDefaultsJson;
+    fetchAndActivate(remoteConfig);
+    if (Math.random() < 0.5) {
+      this.isInExperiment = true
+      this.resultsHiden = true
+    } else {
+      this.isInExperiment = false
+      this.resultsHiden = false
+    }
   },
   computed: {
     contributeEveryXMonths: function () {
@@ -274,6 +302,11 @@ export default {
         }
         this.savings.compound = compoundGrowth
         this.savings.contributions = contributionGrowth
+      }
+      if(this.isInExperiment){
+        logEvent(this.analytics, 'Successful calculation', { experimentBucket:'Baseline' })
+      }else{
+        logEvent(this.analytics, 'Successful calculation', { experimentBucket:'Challenger' })
       }
 
       this.savings.labels = chartLabels
