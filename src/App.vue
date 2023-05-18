@@ -141,7 +141,7 @@
 import Chart from './components/Compound-Chart.vue'
 import { initializeApp } from "/node_modules/firebase/app";
 import { getAnalytics, logEvent } from "/node_modules/firebase/analytics";
-import { getRemoteConfig, fetchAndActivate } from "/node_modules/firebase/remote-config";
+import { getRemoteConfig, fetchAndActivate, getValue } from "/node_modules/firebase/remote-config";
 
 export default {
   name: 'App',
@@ -156,6 +156,8 @@ export default {
       slideAnimation: false,
       initialCapital: '',
       myAnalytics: null,
+      myRemoteConfig: null,
+      myFirebaseApp: null,
       optionalContributionValue: '',
       optionalContributionFequency: '',
       optionalContributionPeriod: "year",
@@ -197,19 +199,9 @@ export default {
     const app = initializeApp(firebaseConfig);
     // eslint-disable-next-line no-import-assign
     this.analytics = getAnalytics(app);
-    const remoteConfig = getRemoteConfig(app);
+    this.myFirebaseApp = app
+    this.decideView()
 
-    // const rcDefaultsFile = await fetch('src/remote_config_defaults.json');
-    // const rcDefaultsJson = await rcDefaultsFile.json();
-    // remoteConfig.defaultConfig = rcDefaultsJson;
-    fetchAndActivate(remoteConfig);
-    if (Math.random() < 0.5) {
-      this.isInExperiment = true
-      this.resultsHiden = true
-    } else {
-      this.isInExperiment = false
-      this.resultsHiden = false
-    }
   },
   computed: {
     contributeEveryXMonths: function () {
@@ -303,10 +295,10 @@ export default {
         this.savings.compound = compoundGrowth
         this.savings.contributions = contributionGrowth
       }
-      if(this.isInExperiment){
-        logEvent(this.analytics, 'Successful calculation', { experimentBucket:'Baseline' })
-      }else{
-        logEvent(this.analytics, 'Successful calculation', { experimentBucket:'Challenger' })
+      if (this.isInExperiment) {
+        logEvent(this.analytics, 'Successful calculation', { experimentBucket: 'Baseline' })
+      } else {
+        logEvent(this.analytics, 'Successful calculation', { experimentBucket: 'Challenger' })
       }
 
       this.savings.labels = chartLabels
@@ -318,6 +310,21 @@ export default {
         this.resultsHiden = false
         this.divFade = true
       }, 1500)
+    },
+    async decideView() {
+      this.myRemoteConfig = getRemoteConfig(this.myFirebaseApp);
+      this.myRemoteConfig.settings.minimumFetchIntervalMillis = 3600000;
+      let rcDefaults = require('./remote_config_defaults.json');
+      this.myRemoteConfig.defaultConfig = rcDefaults;
+
+      fetchAndActivate(this.myRemoteConfig)
+        .then(() => {
+          this.isInExperiment = getValue(this.myRemoteConfig, "show_new_design").asBoolean()
+          this.resultsHiden = getValue(this.myRemoteConfig, "show_new_design").asBoolean()
+        })
+        .catch((err) => {
+          console.log(err)
+        });
     }
   }
 }
